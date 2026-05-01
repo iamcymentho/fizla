@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Fizla.Domain</RootNamespace>
+    <AssemblyName>Fizla.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fizla-postgres
+    environment:
+      POSTGRES_USER: fizla
+      POSTGRES_PASSWORD: fizla
+      POSTGRES_DB: fizla
+    ports:
+      - "5440:5432"
+    volumes:
+      - fizla-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fizla -d fizla"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fizla-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=fizla;Username=fizla;Password=fizla"
+    ports:
+      - "5080:8080"
+    restart: on-failure
+
+volumes:
+  fizla-pg-data:

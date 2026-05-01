@@ -1,0 +1,35 @@
+### Ingest a transaction
+POST http://localhost:5080/webhooks/transactions
+Content-Type: application/json
+
+{
+  "id": "tx-2026-0001",
+  "amount": 250.00,
+  "currency": "USD",
+  "timestamp": "2026-05-01T10:15:00Z",
+  "status": "Completed"
+}
+
+### Replay the same transaction (idempotency check — same response, no duplicate row)
+POST http://localhost:5080/webhooks/transactions
+Content-Type: application/json
+
+{
+  "id": "tx-2026-0001",
+  "amount": 250.00,
+  "currency": "USD",
+  "timestamp": "2026-05-01T10:15:00Z",
+  "status": "Completed"
+}
+
+### Invalid payload (returns 400 with validation problem details)
+POST http://localhost:5080/webhooks/transactions
+Content-Type: application/json
+
+{
+  "id": "",
+  "amount": -5,
+  "currency": "us",
+  "timestamp": "0001-01-01T00:00:00Z",
+  "status": "what"
+}
